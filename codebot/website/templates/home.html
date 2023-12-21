@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+
+  {% if response %}
+    <pre><code class='language-{{lang}} line-numbers'>{{response}}
+    </code></pre>
+  {% else %}
+    <pre><code class='language-python line-numbers'>print('hello there!')
+    </pre></code>
+  {% endif %}
+
+  <br/><br/>
+  <form method=POST action="{% url 'home' %}">
+    {% csrf_token%}
+    <div class="mb-3">
+      <textarea class="form-control" name="code" placeholder="fix your code with AI" rows="3">{{code}}</textarea>
+    </div>
+    <select class="form-select" name="lang">
+      <option selected value="select">select programming language</option>
+      {% for lang in lang_list %}
+        <option value="{{lang}}">{{lang}}</option>
+      {% endfor %}
+    </select>
+    </br>
+    <button type="submit" class="btn btn-secondary">Submit</button>
+  </form>
+
+{% else %}
+  <div class="col-md-6 offset-md-3">
+    <h1>Login</h1>
+    <div clas="form-group">
+      <form method="POST" action="{% url 'login' %}" > {% csrf_token %}
+        <input type="text" class="form-control"
+          placeholder="enter Usename" name="username">
+        <br/>
+        <input type="password" class="form-control"
+          placeholder="enter Password" name="password">
+        <br/>
+        
+        <button type="submit" class="btn btn-secondary">Login</button>
+      </form>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}
+
+
